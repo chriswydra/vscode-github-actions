@@ -63,7 +63,7 @@ function isGitHubRemote(pushUrl: string | undefined): boolean {
   // Remotes for other hosts (e.g. a Bitbucket repo in a multi-root workspace) may use the
   // scp-style `git@host:owner/repo.git` form, which `new URL()` rejects. The host is parsed
   // defensively so one such remote does not abort activation for the whole workspace.
-  return isGitHubRemoteUrl(pushUrl, useEnterprise() ? new URL(getGitHubApiUri()).host : undefined);
+  return isGitHubRemoteUrl(pushUrl, useEnterprise() ? new URL(getGitHubApiUri()).hostname : undefined);
 }
 
 export async function getGitHubUrls(): Promise<GitHubUrls[] | null> {

@@ -55,6 +55,11 @@ describe("isGitHubRemoteUrl", () => {
     expect(isGitHubRemoteUrl("git@github.mycompany.com:owner/repo.git")).toBe(false);
   });
 
+  it("matches the enterprise host when the remote or server uses a custom port", () => {
+    expect(isGitHubRemoteUrl("https://ghe.example.com:8443/owner/repo.git", "ghe.example.com")).toBe(true);
+    expect(isGitHubRemoteUrl("ssh://git@ghe.example.com:2222/owner/repo.git", "ghe.example.com")).toBe(true);
+  });
+
   it("matches GitHub Enterprise Cloud with data residency hosts", () => {
     expect(isGitHubRemoteUrl("git@myorg.ghe.com:owner/repo.git")).toBe(true);
     expect(isGitHubRemoteUrl("https://myorg.ghe.com/owner/repo.git")).toBe(true);
