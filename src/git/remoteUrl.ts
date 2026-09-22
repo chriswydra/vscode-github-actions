@@ -21,3 +21,28 @@ export function getRemoteHost(remoteUrl: string): string | undefined {
     return undefined;
   }
 }
+
+/**
+ * Whether a git remote points at GitHub: github.com, the configured GitHub Enterprise host, or a
+ * GitHub Enterprise Cloud with data residency host (`*.ghe.com`).
+ *
+ * The comparison is made against the parsed, lower-cased host so a `github.com` segment in the
+ * repository path or a differently cased host does not change the result. It is a substring match
+ * rather than an equality check so SSH config aliases such as `github.com-work` keep matching.
+ */
+export function isGitHubRemoteUrl(remoteUrl: string, enterpriseHost?: string): boolean {
+  const host = getRemoteHost(remoteUrl);
+  if (!host) {
+    return false;
+  }
+
+  if (host.includes("github.com")) {
+    return true;
+  }
+
+  if (enterpriseHost && host.includes(enterpriseHost.toLowerCase())) {
+    return true;
+  }
+
+  return host.endsWith(".ghe.com");
+}
